@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Turn Korean and English cosmetic-treatment reviews into structured, comparable English records.">
+  <title>Review Normalizer · Gangnam Beauty Guide</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Gangnam Beauty Guide home"><span class="brand-symbol" aria-hidden="true">✳</span> Gangnam <span class="wordmark-light">Beauty Guide</span></a>
+    <div class="header-right"><span class="product-tag">REVIEW INTELLIGENCE</span><a href="/docs" class="docs-link">API docs <span aria-hidden="true">↗</span></a></div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> A little clarity, in any language</div>
+      <h1 id="page-title">Review Normalizer<span class="title-period">.</span></h1>
+      <p class="subtitle">Turn messy multilingual cosmetic-treatment reviews into structured, comparable data.</p>
+      <div class="capabilities"><span>Korean + English</span><span>Structured extraction</span><span>Clinic alias matching</span></div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel input-panel" aria-labelledby="input-title">
+        <div class="panel-heading"><div><span class="section-number">01 / INPUT</span><h2 id="input-title">Start with a review</h2></div><span class="language-badge" aria-label="Korean or English">가 / A</span></div>
+        <form id="review-form">
+          <div class="demo-heading"><span>Demo reviews</span><span class="muted small">Synthetic examples</span></div>
+          <div class="demo-buttons" role="group" aria-label="Load a synthetic demo review">
+            <button type="button" class="demo-button" data-example="0"><span class="demo-language">KO</span> Rhinoplasty</button>
+            <button type="button" class="demo-button" data-example="1"><span class="demo-language">EN</span> Rhinoplasty</button>
+            <button type="button" class="demo-button" data-example="2"><span class="demo-language">KO</span> Eyelid surgery</button>
+          </div>
+          <div class="review-label"><label for="review">Original review</label><button type="button" id="clear-button" class="text-button" disabled>Clear</button></div>
+          <textarea id="review" name="review" rows="9" maxlength="10000" placeholder="Paste a Korean or English review..." required aria-describedby="review-help character-count"></textarea>
+          <div class="textarea-footer"><span id="review-help">Keep the details. We’ll find the structure.</span><span id="character-count">0 / 10,000</span></div>
+          <button type="submit" id="normalize-button" class="primary-button"><span class="button-label">Normalize Review</span><span class="button-arrow" aria-hidden="true">↗</span><span class="spinner" aria-hidden="true" hidden></span></button>
+          <p class="privacy-note"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg><span>Sent to Google Gemini for extraction. Reviews aren’t stored by this app.</span></p>
+        </form>
+        <div class="input-footnote"><span class="footnote-mark" aria-hidden="true">↳</span><p>Try the first two demo reviews.<br><strong>Different clinic names. The same canonical record.</strong></p></div>
+      </section>
+
+      <section class="panel output-panel" aria-labelledby="output-title" aria-busy="false">
+        <div class="panel-heading output-heading"><div><span class="section-number">02 / OUTPUT</span><h2 id="output-title">A clearer picture</h2></div><span id="result-badge" class="neutral-badge">Awaiting review</span></div>
+        <p id="live-status" class="sr-only" role="status" aria-live="polite"></p>
+        <div id="error-message" class="error-message" role="alert" hidden></div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-top"><span class="empty-mark" aria-hidden="true">↗</span><h3>Less noise.<br>More understanding.</h3><p>One review becomes an English translation,<br class="desktop-break"> clear treatment details, and a resolved clinic.</p></div>
+          <div class="alias-preview">
+            <div class="preview-label">THE SAME CLINIC, DIFFERENT NAMES</div>
+            <div class="preview-aliases"><span lang="ko">아이디병원</span><span>ID Plastic Surgery</span></div>
+            <div class="preview-connector" aria-hidden="true">↓</div>
+            <div class="preview-canonical"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><strong>ID Hospital</strong><span>Canonical clinic</span></div>
+            <p class="preview-caption">Alias demonstration from the local clinic dataset</p>
+          </div>
+          <p class="empty-instruction">Paste a review or choose a demo to get started.</p>
+        </div>
+
+        <div id="loading-state" class="loading-state" hidden><span class="large-spinner" aria-hidden="true"></span><h3>Finding the details…</h3><p>Translating your review and organizing the information.<br>This usually takes a few seconds.</p><div class="loading-steps"><span>Read & translate</span><span>Extract facts</span><span>Resolve clinic</span></div></div>
+
+        <div id="results" class="results" hidden>
+          <section id="clinic-panel" class="clinic-panel" aria-labelledby="clinic-title">
+            <div class="clinic-panel-top"><h3 id="clinic-title">Clinic normalization</h3><span id="match-badge" class="match-badge"></span></div>
+            <div class="clinic-flow"><div><span class="fact-label">Clinic mentioned</span><p id="clinic-raw" class="clinic-name"></p></div><span class="resolution-arrow" aria-hidden="true">→</span><div><span class="fact-label">Canonical clinic</span><p id="clinic-canonical" class="clinic-name canonical"></p></div></div>
+            <div class="match-footer"><span id="match-explanation"></span><span id="confidence"></span></div>
+          </section>
+          <section class="translation-section" aria-labelledby="translation-title"><div class="result-section-heading"><h3 id="translation-title">English translation</h3><span id="language-label" class="neutral-badge"></span></div><p id="translation"></p></section>
+          <dl class="facts-grid"><div><dt>Procedure</dt><dd id="procedure"></dd><p id="procedure-raw" class="raw-procedure"></p></div><div><dt>Surgeon</dt><dd id="surgeon"></dd></div><div><dt>Price</dt><dd id="price"></dd></div><div><dt>Procedure date</dt><dd id="procedure-date"></dd></div></dl>
+          <section class="trust-section" aria-labelledby="trust-title"><h3 id="trust-title">Trust signals</h3><p class="section-caption">Details present in the review, not verified claims of safety or quality.</p><div id="trust-signals" class="trust-chips"></div></section>
+          <div class="outcome-grid"><section aria-labelledby="positive-title"><h3 id="positive-title"><span class="outcome-dot positive" aria-hidden="true"></span>Positive outcomes</h3><ul id="positive-outcomes" class="outcomes"></ul></section><section aria-labelledby="negative-title"><h3 id="negative-title"><span class="outcome-dot negative" aria-hidden="true"></span>Negative / complication signals</h3><ul id="negative-outcomes" class="outcomes"></ul></section></div>
+          <details class="json-details"><summary>View structured JSON <span aria-hidden="true">+</span></summary><div class="json-toolbar"><span>API response</span><button type="button" id="copy-json" class="text-button">Copy JSON</button></div><pre id="json-output" tabindex="0" aria-label="Structured JSON response"></pre></details>
+        </div>
+      </section>
+    </div>
+    <footer><span>GANGNAM BEAUTY GUIDE <span class="footer-divider">/</span> Review Normalizer</span><span>Information extraction. Not medical advice.</span></footer>
+  </main>
+</body>
+</html>

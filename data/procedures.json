@@ -1,0 +1,8 @@
+{
+  "Rhinoplasty": ["코수술", "코 수술", "코성형", "코 성형", "rhinoplasty", "nose surgery", "nose job"],
+  "Double Eyelid Surgery": ["쌍꺼풀", "쌍꺼풀 수술", "쌍꺼풀수술", "double eyelid surgery", "double-eyelid surgery"],
+  "Facial Contouring": ["안면윤곽", "안면 윤곽", "안면윤곽 수술", "facial contouring"],
+  "Liposuction": ["지방흡입", "지방 흡입", "liposuction"],
+  "Botulinum Toxin Injection": ["보톡스", "botox", "botulinum toxin injection"],
+  "Dermal Filler": ["필러", "filler", "dermal filler", "dermal fillers"]
+}
